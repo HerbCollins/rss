@@ -1,5 +1,5 @@
 ## maker/rss
-maker/rss is a package that follows the RSS 2.0 standard
+maker/rss is a package that based on moell/rss
 
 ### 基于moell/rss扩展包更改
 [moell/rss](https://github.com/moell-peng/rss)
