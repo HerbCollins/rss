@@ -6,7 +6,7 @@ maker/rss is a package that based on moell/rss
 
 ### 安装
 ```shell
-composer require "maker/rss:1.*"
+composer require maker/rss
 ```
 
 ### 增加
