@@ -14,6 +14,8 @@ class Rss implements RssContract
 
     protected $channel;
 
+    protected $image;
+
     protected $items;
 
     public function setEncode($encode)
@@ -83,6 +85,7 @@ class Rss implements RssContract
         return $this;
     }
 
+
     /**
      * @param array $items
      */
@@ -93,6 +96,11 @@ class Rss implements RssContract
         return $this;
     }
 
+    public function image(array $image){
+        $this->image = $image;
+
+        return $this;
+    }
 
     /**
      * @return \SimpleXMLElement
@@ -104,9 +112,9 @@ class Rss implements RssContract
             throw new \Exception('Please set the required data');
         }
 
-        $xml = new \SimpleXMLElement('<?xml version="1.0" encoding="'.$this->encode.'"?><rss xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"></rss>');
+        $xml = new SimpleXMLExtended('<?xml version="1.0" encoding="'.$this->encode.'"?><rss xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"></rss>');
 
-        $this->addItem($this->addChannel($xml));
+        $this->addItem($this->addImage($this->addChannel($xml)));
 
         return $xml;
     }
@@ -119,9 +127,31 @@ class Rss implements RssContract
         foreach ($this->items as $it) {
             $item = $xml->addChild('item');
             foreach ($it as $key => $value) {
-                $this->addNode($key, $value, $item);
+                if(is_array($value)){
+                    $this->addNode($key,$value,$item);
+                }else{
+                    $item->{$key} = null;
+                    $item->{$key}->addCDATA($value);
+                }
             }
         }
+    }
+
+
+    /**
+     * add image
+     *
+     * @param $xml
+     */
+    private function addImage($xml){
+        $img = $xml->addChild('image');
+
+        foreach ($this->image as $key => $value) {
+            $img->{$key} = null;
+            $img->{$key}->addCDATA($value);
+        }
+
+        return $xml;
     }
 
     /**
@@ -134,9 +164,9 @@ class Rss implements RssContract
         $node = $xml->addChild('channel');
 
         foreach ($this->channel as $key => $value) {
-            $this->addNode($key, $value, $node);
+            $node->{$key} = null;
+            $node->{$key}->addCDATA($value);
         }
-
         return $node;
     }
 
@@ -149,6 +179,7 @@ class Rss implements RssContract
     {
         if (is_array($value)) {
             if ($value['value'] != "") {
+
                 $node = $xml->addChild($key, $value['value']);
 
                 if (is_array($value['attr']) && !empty($value['attr'])) {
@@ -157,6 +188,7 @@ class Rss implements RssContract
                     }
                 }
             }
+
         } else {
             $xml->addChild($key, $value);
         }
@@ -167,9 +199,10 @@ class Rss implements RssContract
      * @param array $channel
      * @param array $items
      */
-    public function fastBuild(array $channel, array $items)
+    public function fastBuild(array $channel , array $image, array $items)
     {
         $this->channel($channel);
+        $this->image($image);
         $this->items($items);
         return $this->build();
     }

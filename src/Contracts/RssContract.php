@@ -16,9 +16,11 @@ interface RssContract
 
     public function items(array $items);
 
+    public function image(array $image);
+
     public function build();
 
-    public function fastBuild(array $channel, array $item);
+    public function fastBuild(array $channel , array $image , array $item);
 
     public function __toString();
 }

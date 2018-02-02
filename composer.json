@@ -1,6 +1,6 @@
 {
-    "name": "moell/rss",
-    "description": "moell/rss is a package that follows the RSS 2.0 standard",
+    "name": "maker/rss",
+    "description": "maker/rss is a package based on moell/rss",
     "keywords": ["rss"],
     "type": "library",
     "license": "MIT",
@@ -8,6 +8,10 @@
         {
             "name": "Moell",
             "email": "moell91@foxmail.com"
+        },
+        {
+            "name": "Maker",
+            "email": "maker68@163.com"
         }
     ],
     "minimum-stability": "dev",
@@ -16,7 +20,7 @@
     },
     "autoload" : {
         "psr-4": {
-            "Moell\\Rss\\": "src/"
+            "Maker\\Rss\\": "src/"
         }
     }
 }
